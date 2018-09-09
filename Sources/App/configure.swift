@@ -14,13 +14,11 @@ public func configure(
     try routes(router)
     services.register(router, as: Router.self)
 
-    let myService = NIOServerConfig.default(port: 8006)
-    services.register(myService)
-
-    try services.register(LeafProvider())
-    try services.register(FluentPostgreSQLProvider())
+    let leafProvider = LeafProvider()
+    try services.register(leafProvider)
     config.prefer(LeafRenderer.self, for: ViewRenderer.self)
 
+    try services.register(FluentPostgreSQLProvider())
     let postgresqlConfig = PostgreSQLDatabaseConfig(
         hostname: "127.0.0.1",
         port: 5432,
